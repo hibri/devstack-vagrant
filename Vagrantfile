@@ -1,3 +1,4 @@
+
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -54,6 +55,10 @@ def configure_vm(name, vm, conf)
     if conf["mac_address_#{name}"]
       vb.customize ["modifyvm", :id, "--macaddress2", conf["mac_address_#{name}"]]
     end
+
+     # Use VBoxManage to customize the VM. For example to change memory:
+             vb.customize ["modifyvm", :id, "--memory", "8192"]
+             vb.customize ["modifyvm", :id, "--cpus", "4"]
   end
 
   # puppet provisioning
@@ -146,7 +151,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "manager", primary: true do |manager|
     configure_vm("manager", manager.vm, conf)
-    manager.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    manager.vm.network "forwarded_port", guest: 80, host: 8081, host_ip: "127.0.0.1"
     manager.vm.network "forwarded_port", guest: 6080, host: 6080, host_ip: "127.0.0.1"
   end
 
